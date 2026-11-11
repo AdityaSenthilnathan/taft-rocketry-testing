@@ -569,7 +569,6 @@ const initScrollLottie = () => {
     let lastFrame = -1;
     let cssWidth = 0;
     let cssHeight = 0;
-    const verticalOverflow = 240;
 
     lottieHost.classList.add("is-loading");
     lottieHost.classList.remove("is-ready");
@@ -586,9 +585,7 @@ const initScrollLottie = () => {
     const updateCanvasSize = () => {
         const rect = lottieHost.getBoundingClientRect();
         cssWidth = Math.max(1, rect.width);
-        cssHeight = Math.max(1, rect.height + verticalOverflow);
-        canvas.style.height = `calc(100% + ${verticalOverflow}px)`;
-        canvas.style.transform = `translateY(${-verticalOverflow / 2}px)`;
+        cssHeight = Math.max(1, rect.height);
         const dpr = window.devicePixelRatio || 1;
         canvas.width = Math.floor(cssWidth * dpr);
         canvas.height = Math.floor(cssHeight * dpr);
@@ -604,11 +601,11 @@ const initScrollLottie = () => {
             return;
         }
         context.clearRect(0, 0, cssWidth, cssHeight);
-        const scale = 1;
+        const scale = cssHeight / image.height;
         const drawWidth = image.width * scale;
         const drawHeight = image.height * scale;
         const x = (cssWidth - drawWidth) / 2;
-        const y = 70;
+        const y = (cssHeight - drawHeight) / 2;
         context.drawImage(image, x, y, drawWidth, drawHeight);
     };
 
